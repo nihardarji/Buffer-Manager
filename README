@@ -1,0 +1,83 @@
+             Assignment 2  -  Buffer Manager
+                                                
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+GROUP MEMBERS
+
+1. Maharsh Hetal Gheewala  (A20442506)
+2. Nihar Darji (A20459275) 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Goal : To implement a buffer manager that manages a buffer of blocks in memory including reading and flushing them to disk and also perform page replacement using LRU and FIFO strategy.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Code Structure:
+---------------
+Interface : 
+-----------
+It is executed in header document buffer_mgr.h . The techniques in the interface utilize the two information structures to store data about Buffer Pool and pages - BM_BufferPool and the BM_PageHandle separately .
+
+Buffer Pool Methods:
+--------------------
+1. initBufferPool() : 
+	- This function creates a new buffer pool in memory.
+	- The parameter numPages characterizes the size of the support for example number of page outlines that can be put away in the cushion..
+	- The pool is utilized to reserve pages from the page record with name pageFileName. 
+	- The tally factors (peruse and compose) are introduced to 0 and current line size is set to 0.
+
+2. shutdownBufferPool():
+	- This capacity first calls the forceFlushPool() which composes all the messy pages to the plate.
+	- At that point it closes down or close the cradle pool by expelling all pages from memory
+	- It discharges all the memory designated by setting the factors curQueueSize and curBufferSize to 0
+
+3. forceFlushPool():
+	-  causes every single messy page (with fix tally 0) from the support pool to be composed to plate.
+	- The composed pages are presently reset to "not grimy" i.e DirtyBit=0 and writeCount is augmented.
+
+	
+Page Management Methods:
+-----------------------
+
+1. pinPage():
+	- This function pins the page with page number pageNum.
+	- It first checks if the cushion is full, if support is full it calls one of the substitution technique.
+	- Else pages are perused and stuck by utilizing readBlock() and the tally variable of the page TotalFix is increased.
+
+2. unpinPage():
+	- This capacity circles through the PageFrames in BufferPool and sees the page as unPinned.
+	- At that point it unfastens the page for example expels the page from memory.
+	- pin status is set to 0 and the count variable TotalFix is decremented.
+
+3. markDirty():
+	- This function marks the page dirty when modified
+	- The page number in the buffer is found and its DirtyBit variable is set to 1.
+
+4. forcePage():
+	- This capacity composes the present substance of the page back to the page record on circle.
+	- The page file is opened and the contents are written to disk.
+	- Then the write count is incremented and mark the page not dirty after updating the contents
+
+Statistics Methods:
+------------------
+
+1. getFrameContents():
+	- This capacity restores the substance of page outline NO_PAGE consistent is returned if there are no pages as of now in the support..
+	- It first checks if the support is full, if cushion is full it calls one of the substitution system.
+	
+2. getDirtyFlags():
+	- We repeat over all the page outlines in the cushion pool to get the dirtyBit estimation of the page outlines present in the support pool.
+	- At that point it restores a varieties of boolean qualities speaking to the filthy status of the pages in the cushion.
+
+3. getFixCounts():
+	- This capacity circles through all the edges made in BufferPool and returns the tally variable TotalFix for each casing in BufferPool.
+
+4. getNumReadIO():
+	- This capacity restores the quantity of pages that have been perused from circle since a cradle pool has been introduced.
+
+5. getNumWriteIO():
+	- It restores the quantity of pages kept in touch with the page record since the cushion pool has been instated.
+
+Test Cases : 
+-----------
+The code implements helper functions written in buffer_mgr_stat.h and buffer_mgr_stat.c . Also test_assign2_1.c implements several test cases using the buffer_mgr.h interface with the FIFO stratergy.
+And test_assign2_2.c implements several test cases using LRU stratergy.
